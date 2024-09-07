@@ -2,6 +2,7 @@ const numberButtons = document.querySelectorAll(".number");
 const operationButtons = document.querySelectorAll(".mathOperation");
 const equalButton = document.querySelector(".operationEquals");
 const resetButton = document.querySelector(".operationReset");
+const decimalSignButton = document.querySelector(".decimalSign");
 const displayDiv = document.querySelector(".displayValue");
 
 const maximumValueDisplay = 9999999999;
@@ -72,9 +73,13 @@ const operationButtonClick = () => {
 
 const equalsButtonClick = () => {
 	equalButton.addEventListener("click", () => {
+		if (operator === "" || firstNumber === "" || secondNumber === "") {
+			return;
+		}
+		console.log(firstNumber, secondNumber, displayValue, operator);
+
 		displayValue = operate(operator, firstNumber, secondNumber);
 		showCurrentValue();
-		console.log(firstNumber, secondNumber, displayValue, operator);
 	});
 };
 
@@ -84,6 +89,17 @@ const resetButtonClick = () => {
 		firstNumber = "";
 		secondNumber = "";
 		displayDiv.textContent = 0;
+	});
+};
+
+const decimalSignButtonClick = () => {
+	decimalSignButton.addEventListener("click", () => {
+		if (displayValue.toString().includes(".")) {
+			return;
+		}
+		displayValue = displayValue + ".";
+		firstNumber = displayValue;
+		showCurrentValue();
 	});
 };
 
@@ -112,3 +128,4 @@ numberButtonClick();
 operationButtonClick();
 equalsButtonClick();
 resetButtonClick();
+decimalSignButtonClick();
