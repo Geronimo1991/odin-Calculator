@@ -1,5 +1,66 @@
-.display {
-	height: 50px;
-	width: 500px;
-	border: 2px black solid;
+body {
+	background-color: gray;
+}
+
+.container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	width: 100vw;
+}
+
+.calculator {
+	background-color: rgb(44, 43, 43);
+	border-radius: 10px;
+	padding: 10px;
+	width: 310px;
+	height: 500px;
+}
+
+button {
+	border: none;
+	border-radius: 5px;
+	font-size: 25px;
+	width: 73.5px;
+	height: 78px;
+}
+
+.zero {
+	width: 152px;
+}
+
+.number,
+.decimalSign {
+	background-color: royalblue;
+}
+
+.mathOperation,
+.operationEquals {
+	background-color: orange;
+}
+
+.operationReset,
+.operationChangeSign,
+.operationPercentage {
+	background-color: green;
+}
+
+.displayValue {
+	display: flex;
+	flex-direction: row;
+	justify-content: end;
+	align-items: center;
+	margin-bottom: 10px;
+	border: 5px black solid;
+	background-color: darkgray;
+	font-size: 45px;
+	height: 70px;
+	width: 300px;
+}
+
+.buttonContainer {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 5px;
 }

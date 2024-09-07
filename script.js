@@ -2,14 +2,12 @@ const numberButtons = document.querySelectorAll(".number");
 const operationButtons = document.querySelectorAll(".mathOperation");
 const equalButton = document.querySelector(".operationEquals");
 const resetButton = document.querySelector(".operationReset");
-const topLineDiv = document.querySelector(".topLine");
-const bottomLineDiv = document.querySelector(".bottomLine");
+const displayDiv = document.querySelector(".displayValue");
 
-let firstNumber;
-let secondNumber;
-let operator;
-let bottomLine = "";
-let topLine = "";
+let firstNumber = "";
+let secondNumber = "";
+let operator = "";
+let displayValue = "";
 
 const operate = (operator, firstNumber, secondNumber) => {
 	switch (operator) {
@@ -45,8 +43,9 @@ const numberButtonClick = () => {
 		const value = button.textContent;
 
 		button.addEventListener("click", () => {
-			bottomLine = bottomLine + value;
-			showCurrentBottomLine();
+			displayValue = displayValue + value;
+			firstNumber = displayValue;
+			showCurrentValue();
 		});
 	});
 };
@@ -56,48 +55,34 @@ const operationButtonClick = () => {
 		const operatorValue = button.textContent;
 
 		button.addEventListener("click", () => {
-			firstNumber = bottomLine;
 			operator = operatorValue;
-			topLine = bottomLine + operatorValue;
-			showCurrentTopLine();
-			clearBottomLine();
+			secondNumber = firstNumber;
+			firstNumber = "";
+			displayValue = "";
+			console.log(firstNumber, secondNumber, displayValue, operator);
 		});
 	});
 };
 
 const equalsButtonClick = () => {
 	equalButton.addEventListener("click", () => {
-		secondNumber = bottomLine;
-		clearTopLine();
-		topLine = operate(operator, firstNumber, secondNumber);
-		showCurrentTopLine();
-		clearBottomLine();
+		secondNumber = displayValue;
+		displayValue = operate(operator, firstNumber, secondNumber);
+		showCurrentValue();
 	});
 };
 
 const resetButtonClick = () => {
 	resetButton.addEventListener("click", () => {
-		clearTopLine();
-		clearBottomLine();
+		displayValue = 0;
+		firstNumber = "";
+		secondNumber = "";
+		showCurrentValue();
 	});
 };
 
-const showCurrentBottomLine = () => {
-	bottomLineDiv.textContent = bottomLine;
-};
-
-const clearBottomLine = () => {
-	bottomLine = "";
-	showCurrentBottomLine();
-};
-
-const showCurrentTopLine = () => {
-	topLineDiv.textContent = topLine;
-};
-
-const clearTopLine = () => {
-	topLine = "";
-	showCurrentTopLine();
+const showCurrentValue = () => {
+	displayDiv.textContent = displayValue;
 };
 
 numberButtonClick();
