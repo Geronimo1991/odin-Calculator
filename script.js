@@ -4,6 +4,8 @@ const equalButton = document.querySelector(".operationEquals");
 const resetButton = document.querySelector(".operationReset");
 const displayDiv = document.querySelector(".displayValue");
 
+const maximumValueDisplay = 9999999999;
+
 let firstNumber = "";
 let secondNumber = "";
 let operator = "";
@@ -12,13 +14,13 @@ let displayValue = "";
 const operate = (operator, firstNumber, secondNumber) => {
 	switch (operator) {
 		case "+":
-			return add(firstNumber, secondNumber);
+			return add(secondNumber, firstNumber);
 		case "-":
-			return substract(firstNumber, secondNumber);
+			return substract(secondNumber, firstNumber);
 		case "*":
-			return multiply(firstNumber, secondNumber);
+			return multiply(secondNumber, firstNumber);
 		case "/":
-			return divide(firstNumber, secondNumber);
+			return divide(secondNumber, firstNumber);
 	}
 };
 
@@ -35,6 +37,9 @@ const multiply = (a, b) => {
 };
 
 const divide = (a, b) => {
+	if (b === 0) {
+		return "ERROR!";
+	}
 	return +a / +b;
 };
 
@@ -46,6 +51,7 @@ const numberButtonClick = () => {
 			displayValue = displayValue + value;
 			firstNumber = displayValue;
 			showCurrentValue();
+			console.log(firstNumber, secondNumber, displayValue, operator);
 		});
 	});
 };
@@ -66,24 +72,41 @@ const operationButtonClick = () => {
 
 const equalsButtonClick = () => {
 	equalButton.addEventListener("click", () => {
-		secondNumber = displayValue;
 		displayValue = operate(operator, firstNumber, secondNumber);
 		showCurrentValue();
+		console.log(firstNumber, secondNumber, displayValue, operator);
 	});
 };
 
 const resetButtonClick = () => {
 	resetButton.addEventListener("click", () => {
-		displayValue = 0;
+		displayValue = "";
 		firstNumber = "";
 		secondNumber = "";
-		showCurrentValue();
+		displayDiv.textContent = 0;
 	});
 };
 
 const showCurrentValue = () => {
-	displayDiv.textContent = displayValue;
+	if (displayValue > maximumValueDisplay) {
+		displayDiv.textContent = "ERROR!";
+	} else if (
+		displayValue.toString().length > maximumValueDisplay.toString().length &&
+		displayValue.toString().includes(".")
+	) {
+		displayDiv.textContent = round(displayValue);
+	} else {
+		displayDiv.textContent = displayValue;
+	}
 };
+
+function round(num) {
+	const decimalPlaces =
+		maximumValueDisplay.toString().length - num.toString().lastIndexOf(".");
+	const p = Math.pow(10, decimalPlaces);
+	const n = num * p * (1 + Number.EPSILON);
+	return Math.round(n) / p;
+}
 
 numberButtonClick();
 operationButtonClick();
