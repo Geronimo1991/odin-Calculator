@@ -3,6 +3,7 @@ const operationButtons = document.querySelectorAll(".mathOperation");
 const equalButton = document.querySelector(".operationEquals");
 const resetButton = document.querySelector(".operationReset");
 const decimalSignButton = document.querySelector(".decimalSign");
+const operationBackspace = document.querySelector(".operationBackspace");
 const displayDiv = document.querySelector(".displayValue");
 
 const maximumValueDisplay = 9999999999;
@@ -103,6 +104,20 @@ const decimalSignButtonClick = () => {
 	});
 };
 
+const backspaceButtonClick = () => {
+	operationBackspace.addEventListener("click", () => {
+		const currentDisplayLength = displayValue.toString().length;
+
+		if (currentDisplayLength === 1) {
+			displayValue = "";
+			displayDiv.textContent = 0;
+		} else {
+			displayValue = displayValue.toString().slice(0, currentDisplayLength - 1);
+			showCurrentValue();
+		}
+	});
+};
+
 const showCurrentValue = () => {
 	if (displayValue > maximumValueDisplay) {
 		displayDiv.textContent = "ERROR!";
@@ -129,3 +144,9 @@ operationButtonClick();
 equalsButtonClick();
 resetButtonClick();
 decimalSignButtonClick();
+backspaceButtonClick();
+
+//todo oprogramuj przycisk zmiany znaku
+//todo dwie operacje pod rzad bez znaku równania
+//todo obsługa klawiatury
+//todo dodaj cssy dla przycisków - dla hover i dla click
