@@ -24,12 +24,22 @@ body {
 	gap: 5px;
 }
 
-button {
+.button {
 	border: none;
 	border-radius: 5px;
 	font-size: 25px;
 	width: 73.5px;
 	height: 78px;
+	opacity: 0.6;
+	transition: 0.05s;
+}
+
+.button:hover {
+	opacity: 0.8;
+}
+
+.button:active {
+	opacity: 1;
 }
 
 .zero {
@@ -69,7 +79,7 @@ button {
 	font-size: 34px;
 }
 
-.operationBackspace{
+.operationBackspace {
 	background-color: red;
 	display: flex;
 	align-items: center;

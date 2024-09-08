@@ -109,7 +109,7 @@ const backspaceButtonClick = () => {
 	operationBackspace.addEventListener("click", () => {
 		const currentDisplayLength = displayValue.toString().length;
 
-		if (currentDisplayLength === 1) {
+		if (currentDisplayLength <= 1) {
 			displayValue = "";
 			displayDiv.textContent = 0;
 		} else {
