@@ -4,6 +4,7 @@ const equalButton = document.querySelector(".operationEquals");
 const resetButton = document.querySelector(".operationReset");
 const decimalSignButton = document.querySelector(".decimalSign");
 const operationBackspace = document.querySelector(".operationBackspace");
+const operationChangeSign = document.querySelector(".operationChangeSign");
 const displayDiv = document.querySelector(".displayValue");
 
 const maximumValueDisplay = 9999999999;
@@ -118,6 +119,14 @@ const backspaceButtonClick = () => {
 	});
 };
 
+const changeSignButtonClick = () => {
+	operationChangeSign.addEventListener("click", () => {
+		displayValue = +displayValue * -1;
+		firstNumber = displayValue;
+		showCurrentValue();
+	});
+};
+
 const showCurrentValue = () => {
 	if (displayValue > maximumValueDisplay) {
 		displayDiv.textContent = "ERROR!";
@@ -145,8 +154,8 @@ equalsButtonClick();
 resetButtonClick();
 decimalSignButtonClick();
 backspaceButtonClick();
+changeSignButtonClick();
 
-//todo oprogramuj przycisk zmiany znaku
 //todo dwie operacje pod rzad bez znaku równania
 //todo obsługa klawiatury
 //todo dodaj cssy dla przycisków - dla hover i dla click
