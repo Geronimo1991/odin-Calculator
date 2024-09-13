@@ -14,6 +14,17 @@ let secondNumber = "";
 let operator = "";
 let displayValue = "";
 
+document.addEventListener("DOMContentLoaded", () => {
+	numberButtonClick();
+	operationButtonClick();
+	equalsButtonClick();
+	resetButtonClick();
+	decimalSignButtonClick();
+	backspaceButtonClick();
+	changeSignButtonClick();
+	keyboardButtonClick();
+});
+
 const operate = (operator, firstNumber, secondNumber) => {
 	switch (operator) {
 		case "+":
@@ -46,86 +57,137 @@ const divide = (a, b) => {
 	return +a / +b;
 };
 
-const numberButtonClick = () => {
+function keyboardButtonClick() {
+	addEventListener("keydown", (event) => {
+		console.log(event);
+
+		if (48 <= event.key.charCodeAt() && event.key.charCodeAt() <= 57) {
+			numberInput(event.key);
+		}
+		if (
+			event.key.charCodeAt() === 42 ||
+			event.key.charCodeAt() === 43 ||
+			event.key.charCodeAt() === 45 ||
+			event.key.charCodeAt() === 47
+		) {
+			operatorInput(event.key);
+		}
+
+		if (event.key.charCodeAt() === 69) {
+			equalsInput();
+		}
+
+		if (event.key.charCodeAt() === 66 || event.key.charCodeAt() === 68) {
+			backspaceInput();
+		}
+
+		if (
+			event.key.charCodeAt() === 44 ||
+			event.key.charCodeAt() === 188 ||
+			event.key.charCodeAt() === 190
+		) {
+			decimalInput();
+		}
+	});
+}
+
+function numberButtonClick() {
 	numberButtons.forEach((button) => {
 		const value = button.textContent;
 
 		button.addEventListener("click", () => {
-			displayValue = displayValue + value;
-			firstNumber = displayValue;
-			showCurrentValue();
-			console.log(firstNumber, secondNumber, displayValue, operator);
+			numberInput(value);
 		});
 	});
+}
+
+const numberInput = (value) => {
+	displayValue = displayValue + value;
+	firstNumber = displayValue;
+	showCurrentValue();
 };
 
-const operationButtonClick = () => {
+function operationButtonClick() {
 	operationButtons.forEach((button) => {
 		const operatorValue = button.textContent;
 
 		button.addEventListener("click", () => {
-			operator = operatorValue;
-			secondNumber = firstNumber;
-			firstNumber = "";
-			displayValue = "";
-			console.log(firstNumber, secondNumber, displayValue, operator);
+			operatorInput(operatorValue);
 		});
 	});
+}
+
+const operatorInput = (operatorValue) => {
+	operator = operatorValue;
+	secondNumber = firstNumber;
+	firstNumber = "";
+	displayValue = "";
 };
 
-const equalsButtonClick = () => {
+function equalsButtonClick() {
 	equalButton.addEventListener("click", () => {
-		if (operator === "" || firstNumber === "" || secondNumber === "") {
-			return;
-		}
-		console.log(firstNumber, secondNumber, displayValue, operator);
-
-		displayValue = operate(operator, firstNumber, secondNumber);
-		showCurrentValue();
+		equalsInput();
 	});
+}
+
+const equalsInput = () => {
+	if (operator === "" || firstNumber === "" || secondNumber === "") {
+		return;
+	}
+
+	displayValue = operate(operator, firstNumber, secondNumber);
+	showCurrentValue();
 };
 
-const resetButtonClick = () => {
+function resetButtonClick() {
 	resetButton.addEventListener("click", () => {
 		displayValue = "";
 		firstNumber = "";
 		secondNumber = "";
 		displayDiv.textContent = 0;
 	});
-};
+}
 
-const decimalSignButtonClick = () => {
+function decimalSignButtonClick() {
 	decimalSignButton.addEventListener("click", () => {
-		if (displayValue.toString().includes(".")) {
-			return;
-		}
-		displayValue = displayValue + ".";
-		firstNumber = displayValue;
-		showCurrentValue();
+		decimalInput();
 	});
+}
+
+const decimalInput = () => {
+	if (displayValue.toString().includes(".")) {
+		return;
+	}
+	displayValue = displayValue + ".";
+	firstNumber = displayValue;
+	showCurrentValue();
 };
 
-const backspaceButtonClick = () => {
+function backspaceButtonClick() {
 	operationBackspace.addEventListener("click", () => {
-		const currentDisplayLength = displayValue.toString().length;
-
-		if (currentDisplayLength <= 1) {
-			displayValue = "";
-			displayDiv.textContent = 0;
-		} else {
-			displayValue = displayValue.toString().slice(0, currentDisplayLength - 1);
-			showCurrentValue();
-		}
+		backspaceInput();
 	});
+}
+
+const backspaceInput = () => {
+	const currentDisplayLength = displayValue.toString().length;
+
+	if (currentDisplayLength <= 1) {
+		displayValue = "";
+		displayDiv.textContent = 0;
+	} else {
+		displayValue = displayValue.toString().slice(0, currentDisplayLength - 1);
+		showCurrentValue();
+	}
 };
 
-const changeSignButtonClick = () => {
+function changeSignButtonClick() {
 	operationChangeSign.addEventListener("click", () => {
 		displayValue = +displayValue * -1;
 		firstNumber = displayValue;
 		showCurrentValue();
 	});
-};
+}
 
 const showCurrentValue = () => {
 	if (displayValue > maximumValueDisplay) {
@@ -148,14 +210,4 @@ function round(num) {
 	return Math.round(n) / p;
 }
 
-numberButtonClick();
-operationButtonClick();
-equalsButtonClick();
-resetButtonClick();
-decimalSignButtonClick();
-backspaceButtonClick();
-changeSignButtonClick();
-
 //todo dwie operacje pod rzad bez znaku równania
-//todo obsługa klawiatury
-//todo dodaj cssy dla przycisków - dla hover i dla click
