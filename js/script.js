@@ -28,13 +28,13 @@ document.addEventListener("DOMContentLoaded", () => {
 const operate = (operator, firstNumber, secondNumber) => {
 	switch (operator) {
 		case "+":
-			return add(secondNumber, firstNumber);
+			return add(firstNumber, secondNumber);
 		case "-":
-			return substract(secondNumber, firstNumber);
+			return substract(firstNumber, secondNumber);
 		case "*":
-			return multiply(secondNumber, firstNumber);
+			return multiply(firstNumber, secondNumber);
 		case "/":
-			return divide(secondNumber, firstNumber);
+			return divide(firstNumber, secondNumber);
 	}
 };
 
@@ -59,11 +59,10 @@ const divide = (a, b) => {
 
 function keyboardButtonClick() {
 	addEventListener("keydown", (event) => {
-		console.log(event);
-
 		if (48 <= event.key.charCodeAt() && event.key.charCodeAt() <= 57) {
 			numberInput(event.key);
 		}
+
 		if (
 			event.key.charCodeAt() === 42 ||
 			event.key.charCodeAt() === 43 ||
@@ -93,36 +92,19 @@ function keyboardButtonClick() {
 
 function numberButtonClick() {
 	numberButtons.forEach((button) => {
-		const value = button.textContent;
-
 		button.addEventListener("click", () => {
-			numberInput(value);
+			numberInput(button.textContent);
 		});
 	});
 }
-
-const numberInput = (value) => {
-	displayValue = displayValue + value;
-	firstNumber = displayValue;
-	showCurrentValue();
-};
 
 function operationButtonClick() {
 	operationButtons.forEach((button) => {
-		const operatorValue = button.textContent;
-
 		button.addEventListener("click", () => {
-			operatorInput(operatorValue);
+			operatorInput(button.textContent);
 		});
 	});
 }
-
-const operatorInput = (operatorValue) => {
-	operator = operatorValue;
-	secondNumber = firstNumber;
-	firstNumber = "";
-	displayValue = "";
-};
 
 function equalsButtonClick() {
 	equalButton.addEventListener("click", () => {
@@ -130,17 +112,9 @@ function equalsButtonClick() {
 	});
 }
 
-const equalsInput = () => {
-	if (operator === "" || firstNumber === "" || secondNumber === "") {
-		return;
-	}
-
-	displayValue = operate(operator, firstNumber, secondNumber);
-	showCurrentValue();
-};
-
 function resetButtonClick() {
 	resetButton.addEventListener("click", () => {
+		operator = "";
 		displayValue = "";
 		firstNumber = "";
 		secondNumber = "";
@@ -154,6 +128,76 @@ function decimalSignButtonClick() {
 	});
 }
 
+function backspaceButtonClick() {
+	operationBackspace.addEventListener("click", () => {
+		backspaceInput();
+	});
+}
+
+function changeSignButtonClick() {
+	operationChangeSign.addEventListener("click", () => {
+		console.log(
+			"początek",
+			"first:",
+			firstNumber,
+			"second:",
+			secondNumber,
+			"operator:",
+			operator,
+			"displayValue:",
+			displayValue
+		);
+
+		displayValue = +displayValue * -1;
+		firstNumber = displayValue;
+		showCurrentValue();
+
+		console.log(
+			"koniec",
+			"first:",
+			firstNumber,
+			"second:",
+			secondNumber,
+			"operator:",
+			operator,
+			"displayValue:",
+			displayValue
+		);
+	});
+}
+
+const numberInput = (value) => {
+	displayValue = displayValue + value;
+	showCurrentValue();
+};
+
+const operatorInput = (operatorValue) => {
+	if (operator !== "") {
+		secondNumber = displayValue;
+		displayValue = operate(operator, firstNumber, secondNumber);
+		showCurrentValue();
+		operator = operatorValue;
+		firstNumber = displayValue;
+		secondNumber = "";
+		displayValue = "";
+	} else {
+		operator = operatorValue;
+		firstNumber = displayValue;
+		displayValue = "";
+	}
+};
+
+const equalsInput = () => {
+	if (operator === "" || firstNumber === "") {
+		return;
+	}
+
+	secondNumber = displayValue;
+	displayValue = operate(operator, firstNumber, secondNumber);
+	operator = "";
+	showCurrentValue();
+};
+
 const decimalInput = () => {
 	if (displayValue.toString().includes(".")) {
 		return;
@@ -162,12 +206,6 @@ const decimalInput = () => {
 	firstNumber = displayValue;
 	showCurrentValue();
 };
-
-function backspaceButtonClick() {
-	operationBackspace.addEventListener("click", () => {
-		backspaceInput();
-	});
-}
 
 const backspaceInput = () => {
 	const currentDisplayLength = displayValue.toString().length;
@@ -180,14 +218,6 @@ const backspaceInput = () => {
 		showCurrentValue();
 	}
 };
-
-function changeSignButtonClick() {
-	operationChangeSign.addEventListener("click", () => {
-		displayValue = +displayValue * -1;
-		firstNumber = displayValue;
-		showCurrentValue();
-	});
-}
 
 const showCurrentValue = () => {
 	if (displayValue > maximumValueDisplay) {
@@ -210,4 +240,5 @@ function round(num) {
 	return Math.round(n) / p;
 }
 
-//todo dwie operacje pod rzad bez znaku równania
+//refactor dwie operacje pod rzad bez znaku równania i równa sie
+//fix zmiany znaku
