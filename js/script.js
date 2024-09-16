@@ -12,7 +12,7 @@ const maximumValueDisplay = 9999999999;
 let firstNumber = "";
 let secondNumber = "";
 let operator = "";
-let displayValue = "";
+let displayValue = 0;
 
 document.addEventListener("DOMContentLoaded", () => {
 	numberButtonClick();
@@ -51,7 +51,7 @@ const multiply = (a, b) => {
 };
 
 const divide = (a, b) => {
-	if (b === 0) {
+	if (b == 0) {
 		return "ERROR!";
 	}
 	return +a / +b;
@@ -92,7 +92,7 @@ function keyboardButtonClick() {
 
 function numberButtonClick() {
 	numberButtons.forEach((button) => {
-		button.addEventListener("click", () => {
+		button.addEventListener("mousedown", () => {
 			numberInput(button.textContent);
 		});
 	});
@@ -100,44 +100,43 @@ function numberButtonClick() {
 
 function operationButtonClick() {
 	operationButtons.forEach((button) => {
-		button.addEventListener("click", () => {
+		button.addEventListener("mousedown", () => {
 			operatorInput(button.textContent);
 		});
 	});
 }
 
 function equalsButtonClick() {
-	equalButton.addEventListener("click", () => {
+	equalButton.addEventListener("mousedown", () => {
 		equalsInput();
 	});
 }
 
 function resetButtonClick() {
-	resetButton.addEventListener("click", () => {
-		operator = "";
-		displayValue = "";
-		firstNumber = "";
-		secondNumber = "";
-		displayDiv.textContent = 0;
+	resetButton.addEventListener("mousedown", (event) => {
+		console.log(event);
+		resetInput();
+		event.stopPropagation();
+		event.preventDefault();
 	});
 }
 
 function decimalSignButtonClick() {
-	decimalSignButton.addEventListener("click", () => {
+	decimalSignButton.addEventListener("mousedown", () => {
 		decimalInput();
 	});
 }
 
 function backspaceButtonClick() {
-	operationBackspace.addEventListener("click", () => {
+	operationBackspace.addEventListener("mousedown", () => {
 		backspaceInput();
 	});
 }
 
 function changeSignButtonClick() {
-	operationChangeSign.addEventListener("click", () => {
+	operationChangeSign.addEventListener("mousedown", () => {
 		console.log(
-			"początek",
+			"początek znaku",
 			"first:",
 			firstNumber,
 			"second:",
@@ -149,11 +148,10 @@ function changeSignButtonClick() {
 		);
 
 		displayValue = +displayValue * -1;
-		firstNumber = displayValue;
-		showCurrentValue();
+		showCurrentValue(); //todo
 
 		console.log(
-			"koniec",
+			"koniec znaku",
 			"first:",
 			firstNumber,
 			"second:",
@@ -167,35 +165,74 @@ function changeSignButtonClick() {
 }
 
 const numberInput = (value) => {
-	displayValue = displayValue + value;
+	if (displayValue == 0) {
+		displayValue = value;
+	} else {
+		displayValue = displayValue + value;
+	}
 	showCurrentValue();
 };
 
 const operatorInput = (operatorValue) => {
-	if (operator !== "") {
-		secondNumber = displayValue;
-		displayValue = operate(operator, firstNumber, secondNumber);
-		showCurrentValue();
-		operator = operatorValue;
-		firstNumber = displayValue;
-		secondNumber = "";
-		displayValue = "";
-	} else {
-		operator = operatorValue;
-		firstNumber = displayValue;
-		displayValue = "";
-	}
+	console.log(
+		"początek",
+		"first:",
+		firstNumber,
+		"second:",
+		secondNumber,
+		"operator:",
+		operator,
+		"displayValue:",
+		displayValue
+	);
+	operator = operatorValue;
+	firstNumber = displayValue;
+	displayValue = 0;
+
+	console.log(
+		"koniec",
+		"first:",
+		firstNumber,
+		"second:",
+		secondNumber,
+		"operator:",
+		operator,
+		"displayValue:",
+		displayValue
+	);
 };
 
 const equalsInput = () => {
-	if (operator === "" || firstNumber === "") {
+	console.log(
+		"rowna sie poczatek",
+		"first:",
+		firstNumber,
+		"second:",
+		secondNumber,
+		"operator:",
+		operator,
+		"displayValue:",
+		displayValue
+	);
+	if (firstNumber == "" && secondNumber == "") {
 		return;
 	}
 
 	secondNumber = displayValue;
 	displayValue = operate(operator, firstNumber, secondNumber);
-	operator = "";
 	showCurrentValue();
+
+	console.log(
+		"rowna sie koniec",
+		"first:",
+		firstNumber,
+		"second:",
+		secondNumber,
+		"operator:",
+		operator,
+		"displayValue:",
+		displayValue
+	);
 };
 
 const decimalInput = () => {
@@ -203,7 +240,15 @@ const decimalInput = () => {
 		return;
 	}
 	displayValue = displayValue + ".";
-	firstNumber = displayValue;
+	showCurrentValue();
+};
+
+const resetInput = () => {
+	console.log("dupa");
+	operator = "";
+	firstNumber = "";
+	secondNumber = "";
+	displayValue = 0;
 	showCurrentValue();
 };
 
@@ -211,12 +256,11 @@ const backspaceInput = () => {
 	const currentDisplayLength = displayValue.toString().length;
 
 	if (currentDisplayLength <= 1) {
-		displayValue = "";
-		displayDiv.textContent = 0;
+		displayValue = 0;
 	} else {
 		displayValue = displayValue.toString().slice(0, currentDisplayLength - 1);
-		showCurrentValue();
 	}
+	showCurrentValue();
 };
 
 const showCurrentValue = () => {
@@ -240,5 +284,7 @@ function round(num) {
 	return Math.round(n) / p;
 }
 
-//refactor dwie operacje pod rzad bez znaku równania i równa sie
 //fix zmiany znaku
+//wpisanie zera na początku
+//refactor dwie operacje pod rzad bez znaku równania i równa sie
+//todo enter bez danych
