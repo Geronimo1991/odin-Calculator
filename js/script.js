@@ -148,7 +148,7 @@ function changeSignButtonClick() {
 		);
 
 		displayValue = +displayValue * -1;
-		showCurrentValue(); //todo
+		showCurrentValue();
 
 		console.log(
 			"koniec znaku",
@@ -214,7 +214,8 @@ const equalsInput = () => {
 		"displayValue:",
 		displayValue
 	);
-	if (firstNumber == "" && secondNumber == "") {
+
+	if (firstNumber === "" && secondNumber === "" && operator === "") {
 		return;
 	}
 
@@ -244,7 +245,6 @@ const decimalInput = () => {
 };
 
 const resetInput = () => {
-	console.log("dupa");
 	operator = "";
 	firstNumber = "";
 	secondNumber = "";
@@ -284,7 +284,4 @@ function round(num) {
 	return Math.round(n) / p;
 }
 
-//fix zmiany znaku
-//wpisanie zera na początku
 //refactor dwie operacje pod rzad bez znaku równania i równa sie
-//todo enter bez danych
