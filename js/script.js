@@ -1,17 +1,18 @@
 const numberButtons = document.querySelectorAll(".number");
 const operationButtons = document.querySelectorAll(".mathOperation");
-const equalButton = document.querySelector(".operationEquals");
+const equalsButton = document.querySelector(".operationEquals");
 const resetButton = document.querySelector(".operationReset");
 const decimalSignButton = document.querySelector(".decimalSign");
-const operationBackspace = document.querySelector(".operationBackspace");
-const operationChangeSign = document.querySelector(".operationChangeSign");
+const backspaceButton = document.querySelector(".operationBackspace");
+const changeSignButton = document.querySelector(".operationChangeSign");
+
 const displayDiv = document.querySelector(".displayValue");
 
-const maximumValueDisplay = 9999999999;
+const DISPLAY_MAX_VALUE = 9999999999;
 
 let firstNumber = "";
 let secondNumber = "";
-let operator = "";
+let mathOperator = "";
 let displayValue = 0;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -25,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	keyboardButtonClick();
 });
 
-const operate = (operator, firstNumber, secondNumber) => {
+function operate(operator, firstNumber, secondNumber) {
 	switch (operator) {
 		case "+":
 			return add(firstNumber, secondNumber);
@@ -36,31 +37,31 @@ const operate = (operator, firstNumber, secondNumber) => {
 		case "/":
 			return divide(firstNumber, secondNumber);
 	}
-};
+}
 
-const add = (a, b) => {
+function add(a, b) {
 	return +a + +b;
-};
+}
 
-const substract = (a, b) => {
+function substract(a, b) {
 	return +a - +b;
-};
+}
 
-const multiply = (a, b) => {
+function multiply(a, b) {
 	return +a * +b;
-};
+}
 
-const divide = (a, b) => {
+function divide(a, b) {
 	if (b == 0) {
 		return "ERROR!";
 	}
 	return +a / +b;
-};
+}
 
 function keyboardButtonClick() {
 	addEventListener("keydown", (event) => {
 		if (48 <= event.key.charCodeAt() && event.key.charCodeAt() <= 57) {
-			numberInput(event.key);
+			inputNumber(event.key);
 		}
 
 		if (
@@ -69,15 +70,15 @@ function keyboardButtonClick() {
 			event.key.charCodeAt() === 45 ||
 			event.key.charCodeAt() === 47
 		) {
-			operatorInput(event.key);
+			inputMathOperator(event.key);
 		}
 
 		if (event.key.charCodeAt() === 69) {
-			equalsInput();
+			inputEqualsOperator();
 		}
 
 		if (event.key.charCodeAt() === 66 || event.key.charCodeAt() === 68) {
-			backspaceInput();
+			inputBackspace();
 		}
 
 		if (
@@ -85,7 +86,7 @@ function keyboardButtonClick() {
 			event.key.charCodeAt() === 188 ||
 			event.key.charCodeAt() === 190
 		) {
-			decimalInput();
+			inputDecimalSign();
 		}
 	});
 }
@@ -93,7 +94,7 @@ function keyboardButtonClick() {
 function numberButtonClick() {
 	numberButtons.forEach((button) => {
 		button.addEventListener("mousedown", () => {
-			numberInput(button.textContent);
+			inputNumber(button.textContent);
 		});
 	});
 }
@@ -101,37 +102,37 @@ function numberButtonClick() {
 function operationButtonClick() {
 	operationButtons.forEach((button) => {
 		button.addEventListener("mousedown", () => {
-			operatorInput(button.textContent);
+			inputMathOperator(button.textContent);
 		});
 	});
 }
 
 function equalsButtonClick() {
-	equalButton.addEventListener("mousedown", () => {
-		equalsInput();
+	equalsButton.addEventListener("mousedown", () => {
+		inputEqualsOperator();
 	});
 }
 
 function resetButtonClick() {
 	resetButton.addEventListener("mousedown", () => {
-		resetInput();
+		inputReset();
 	});
 }
 
 function decimalSignButtonClick() {
 	decimalSignButton.addEventListener("mousedown", () => {
-		decimalInput();
+		inputDecimalSign();
 	});
 }
 
 function backspaceButtonClick() {
-	operationBackspace.addEventListener("mousedown", () => {
-		backspaceInput();
+	backspaceButton.addEventListener("mousedown", () => {
+		inputBackspace();
 	});
 }
 
 function changeSignButtonClick() {
-	operationChangeSign.addEventListener("mousedown", () => {
+	changeSignButton.addEventListener("mousedown", () => {
 		console.log(
 			"początek znaku",
 			"first:",
@@ -139,7 +140,7 @@ function changeSignButtonClick() {
 			"second:",
 			secondNumber,
 			"operator:",
-			operator,
+			mathOperator,
 			"displayValue:",
 			displayValue
 		);
@@ -154,14 +155,14 @@ function changeSignButtonClick() {
 			"second:",
 			secondNumber,
 			"operator:",
-			operator,
+			mathOperator,
 			"displayValue:",
 			displayValue
 		);
 	});
 }
 
-const numberInput = (value) => {
+const inputNumber = (value) => {
 	if (displayValue == 0) {
 		displayValue = value;
 	} else {
@@ -170,30 +171,30 @@ const numberInput = (value) => {
 	showCurrentValue();
 };
 
-const operatorInput = (operatorValue) => {
+const inputMathOperator = (operatorValue) => {
 	if (firstNumber !== "") {
-		equalsInput();
+		inputEqualsOperator();
 	}
 
-	operator = operatorValue;
+	mathOperator = operatorValue;
 	firstNumber = displayValue;
 	displayValue = 0;
 };
 
-const equalsInput = () => {
-	if (firstNumber === "" && secondNumber === "" && operator === "") {
+const inputEqualsOperator = () => {
+	if (firstNumber === "" && secondNumber === "" && mathOperator === "") {
 		return;
 	}
 
 	secondNumber = displayValue;
-	displayValue = operate(operator, firstNumber, secondNumber);
+	displayValue = operate(mathOperator, firstNumber, secondNumber);
 	showCurrentValue();
-	operator = "";
+	mathOperator = "";
 	firstNumber = "";
 	secondNumber = "";
 };
 
-const decimalInput = () => {
+const inputDecimalSign = () => {
 	if (displayValue.toString().includes(".")) {
 		return;
 	}
@@ -201,15 +202,15 @@ const decimalInput = () => {
 	showCurrentValue();
 };
 
-const resetInput = () => {
-	operator = "";
+const inputReset = () => {
+	mathOperator = "";
 	firstNumber = "";
 	secondNumber = "";
 	displayValue = 0;
 	showCurrentValue();
 };
 
-const backspaceInput = () => {
+const inputBackspace = () => {
 	const currentDisplayLength = displayValue.toString().length;
 
 	if (currentDisplayLength <= 1) {
@@ -221,10 +222,10 @@ const backspaceInput = () => {
 };
 
 const showCurrentValue = () => {
-	if (displayValue > maximumValueDisplay) {
+	if (displayValue > DISPLAY_MAX_VALUE) {
 		displayDiv.textContent = "ERROR!";
 	} else if (
-		displayValue.toString().length > maximumValueDisplay.toString().length &&
+		displayValue.toString().length > DISPLAY_MAX_VALUE.toString().length &&
 		displayValue.toString().includes(".")
 	) {
 		displayDiv.textContent = round(displayValue);
@@ -235,7 +236,7 @@ const showCurrentValue = () => {
 
 function round(num) {
 	const decimalPlaces =
-		maximumValueDisplay.toString().length - num.toString().lastIndexOf(".");
+		DISPLAY_MAX_VALUE.toString().length - num.toString().lastIndexOf(".");
 	const p = Math.pow(10, decimalPlaces);
 	const n = num * p * (1 + Number.EPSILON);
 	return Math.round(n) / p;
