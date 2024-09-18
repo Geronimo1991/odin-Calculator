@@ -113,11 +113,8 @@ function equalsButtonClick() {
 }
 
 function resetButtonClick() {
-	resetButton.addEventListener("mousedown", (event) => {
-		console.log(event);
+	resetButton.addEventListener("mousedown", () => {
 		resetInput();
-		event.stopPropagation();
-		event.preventDefault();
 	});
 }
 
@@ -174,47 +171,16 @@ const numberInput = (value) => {
 };
 
 const operatorInput = (operatorValue) => {
-	console.log(
-		"początek",
-		"first:",
-		firstNumber,
-		"second:",
-		secondNumber,
-		"operator:",
-		operator,
-		"displayValue:",
-		displayValue
-	);
+	if (firstNumber !== "") {
+		equalsInput();
+	}
+
 	operator = operatorValue;
 	firstNumber = displayValue;
 	displayValue = 0;
-
-	console.log(
-		"koniec",
-		"first:",
-		firstNumber,
-		"second:",
-		secondNumber,
-		"operator:",
-		operator,
-		"displayValue:",
-		displayValue
-	);
 };
 
 const equalsInput = () => {
-	console.log(
-		"rowna sie poczatek",
-		"first:",
-		firstNumber,
-		"second:",
-		secondNumber,
-		"operator:",
-		operator,
-		"displayValue:",
-		displayValue
-	);
-
 	if (firstNumber === "" && secondNumber === "" && operator === "") {
 		return;
 	}
@@ -222,18 +188,9 @@ const equalsInput = () => {
 	secondNumber = displayValue;
 	displayValue = operate(operator, firstNumber, secondNumber);
 	showCurrentValue();
-
-	console.log(
-		"rowna sie koniec",
-		"first:",
-		firstNumber,
-		"second:",
-		secondNumber,
-		"operator:",
-		operator,
-		"displayValue:",
-		displayValue
-	);
+	operator = "";
+	firstNumber = "";
+	secondNumber = "";
 };
 
 const decimalInput = () => {
@@ -283,5 +240,3 @@ function round(num) {
 	const n = num * p * (1 + Number.EPSILON);
 	return Math.round(n) / p;
 }
-
-//refactor dwie operacje pod rzad bez znaku równania i równa sie
