@@ -9,6 +9,7 @@ const changeSignButton = document.querySelector(".operationChangeSign");
 const displayDiv = document.querySelector(".displayValue");
 
 const DISPLAY_MAX_VALUE = 9999999999;
+const DISPLAY_MIN_VALUE = -9999999999;
 
 let firstNumber = "";
 let secondNumber = "";
@@ -147,7 +148,9 @@ const inputNumber = (value) => {
 		return;
 	}
 
-	if (displayValue.toString() === String("0")) {
+	if ((displayValue + value).toString().length > DISPLAY_MAX_VALUE.toString().length) {
+		return;
+	} else if (displayValue.toString() === String("0")) {
 		displayValue = value;
 	} else {
 		displayValue = displayValue + value;
@@ -224,27 +227,26 @@ const inputBackspace = () => {
 };
 
 const showCurrentValue = () => {
-	if (displayValue > DISPLAY_MAX_VALUE) {
+	if (displayValue > DISPLAY_MAX_VALUE || displayValue < DISPLAY_MIN_VALUE) {
 		displayValue = "ERROR!";
 		displayDiv.textContent = "ERROR!";
 	} else if (
 		displayValue.toString().length > DISPLAY_MAX_VALUE.toString().length &&
 		displayValue.toString().includes(".")
 	) {
-		displayDiv.textContent = round(displayValue);
+		displayValue = round(displayValue);
+		displayDiv.textContent = displayValue;
 	} else {
 		displayDiv.textContent = displayValue;
 	}
 };
 
 function round(num) {
-	const decimalPlaces =
-		DISPLAY_MAX_VALUE.toString().length - num.toString().lastIndexOf(".");
+	const decimalPlaces = DISPLAY_MAX_VALUE.toString().length - num.toString().lastIndexOf(".");
 	const p = Math.pow(10, decimalPlaces);
 	const n = num * p * (1 + Number.EPSILON);
 	return Math.round(n) / p;
 }
 
-//todo spamując liczbami po przecinku da sie popsuc - 3,00000000000 i sie psuje
 //po uzyskaniu wyniku dalej da sie dopisywac liczby
 //spamujac operatorem da sie popsuc
