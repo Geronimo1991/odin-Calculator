@@ -12,9 +12,10 @@ const DISPLAY_MAX_VALUE = 9999999999;
 const DISPLAY_MIN_VALUE = -9999999999;
 
 let firstNumber = "";
-let secondNumber = "";
 let mathOperator = "";
 let displayValue = 0;
+
+let afterEqualsOperations = null;
 
 document.addEventListener("DOMContentLoaded", () => {
 	numberButtonClick();
@@ -144,7 +145,7 @@ function changeSignButtonClick() {
 }
 
 const inputNumber = (value) => {
-	if (displayValue === "ERROR!") {
+	if (displayValue === "ERROR!" || afterEqualsOperations) {
 		return;
 	}
 
@@ -171,27 +172,28 @@ const inputMathOperator = (operatorValue) => {
 	mathOperator = operatorValue;
 	firstNumber = displayValue;
 	displayValue = 0;
+	afterEqualsOperations = false;
 };
 
 const inputEqualsOperator = () => {
-	if (displayValue === "ERROR!") {
+	if (displayValue === "ERROR!" || afterEqualsOperations) {
 		return;
 	}
 
-	if (firstNumber === "" && secondNumber === "" && mathOperator === "") {
+	if (firstNumber === "" && displayValue == 0 && mathOperator === "") {
+		//todo sprawdz
 		return;
 	}
 
-	secondNumber = displayValue;
-	displayValue = operate(mathOperator, firstNumber, secondNumber);
+	displayValue = operate(mathOperator, firstNumber, displayValue);
 	showCurrentValue();
 	mathOperator = "";
 	firstNumber = "";
-	secondNumber = "";
+	afterEqualsOperations = true;
 };
 
 const inputDecimalSign = () => {
-	if (displayValue === "ERROR!") {
+	if (displayValue === "ERROR!" || afterEqualsOperations) {
 		return;
 	}
 
@@ -206,13 +208,13 @@ const inputDecimalSign = () => {
 const inputReset = () => {
 	mathOperator = "";
 	firstNumber = "";
-	secondNumber = "";
 	displayValue = 0;
+	afterEqualsOperations = null;
 	showCurrentValue();
 };
 
 const inputBackspace = () => {
-	if (displayValue === "ERROR!") {
+	if (displayValue === "ERROR!" || afterEqualsOperations) {
 		return;
 	}
 
@@ -248,5 +250,4 @@ function round(num) {
 	return Math.round(n) / p;
 }
 
-//po uzyskaniu wyniku dalej da sie dopisywac liczby
 //spamujac operatorem da sie popsuc
