@@ -133,45 +133,34 @@ function backspaceButtonClick() {
 
 function changeSignButtonClick() {
 	changeSignButton.addEventListener("mousedown", () => {
-		console.log(
-			"początek znaku",
-			"first:",
-			firstNumber,
-			"second:",
-			secondNumber,
-			"operator:",
-			mathOperator,
-			"displayValue:",
-			displayValue
-		);
+		if (displayValue === "ERROR!") {
+			return;
+		}
 
 		displayValue = +displayValue * -1;
 		showCurrentValue();
-
-		console.log(
-			"koniec znaku",
-			"first:",
-			firstNumber,
-			"second:",
-			secondNumber,
-			"operator:",
-			mathOperator,
-			"displayValue:",
-			displayValue
-		);
 	});
 }
 
 const inputNumber = (value) => {
-	if (displayValue == 0) {
+	if (displayValue === "ERROR!") {
+		return;
+	}
+
+	if (displayValue.toString() === String("0")) {
 		displayValue = value;
 	} else {
 		displayValue = displayValue + value;
 	}
+
 	showCurrentValue();
 };
 
 const inputMathOperator = (operatorValue) => {
+	if (displayValue === "ERROR!") {
+		return;
+	}
+
 	if (firstNumber !== "") {
 		inputEqualsOperator();
 	}
@@ -182,6 +171,10 @@ const inputMathOperator = (operatorValue) => {
 };
 
 const inputEqualsOperator = () => {
+	if (displayValue === "ERROR!") {
+		return;
+	}
+
 	if (firstNumber === "" && secondNumber === "" && mathOperator === "") {
 		return;
 	}
@@ -195,9 +188,14 @@ const inputEqualsOperator = () => {
 };
 
 const inputDecimalSign = () => {
+	if (displayValue === "ERROR!") {
+		return;
+	}
+
 	if (displayValue.toString().includes(".")) {
 		return;
 	}
+
 	displayValue = displayValue + ".";
 	showCurrentValue();
 };
@@ -211,6 +209,10 @@ const inputReset = () => {
 };
 
 const inputBackspace = () => {
+	if (displayValue === "ERROR!") {
+		return;
+	}
+
 	const currentDisplayLength = displayValue.toString().length;
 
 	if (currentDisplayLength <= 1) {
@@ -223,6 +225,7 @@ const inputBackspace = () => {
 
 const showCurrentValue = () => {
 	if (displayValue > DISPLAY_MAX_VALUE) {
+		displayValue = "ERROR!";
 		displayDiv.textContent = "ERROR!";
 	} else if (
 		displayValue.toString().length > DISPLAY_MAX_VALUE.toString().length &&
@@ -241,3 +244,7 @@ function round(num) {
 	const n = num * p * (1 + Number.EPSILON);
 	return Math.round(n) / p;
 }
+
+//todo spamując liczbami po przecinku da sie popsuc - 3,00000000000 i sie psuje
+//po uzyskaniu wyniku dalej da sie dopisywac liczby
+//spamujac operatorem da sie popsuc
