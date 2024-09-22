@@ -135,7 +135,7 @@ function backspaceButtonClick() {
 
 function changeSignButtonClick() {
 	changeSignButton.addEventListener("mousedown", () => {
-		if (displayValue === "ERROR!") {
+		if (checkForError()) {
 			return;
 		}
 
@@ -145,7 +145,7 @@ function changeSignButtonClick() {
 }
 
 const inputNumber = (value) => {
-	if (displayValue === "ERROR!" || afterEqualsOperations) {
+	if (checkForError() || afterEqualsOperations) {
 		return;
 	}
 
@@ -161,7 +161,7 @@ const inputNumber = (value) => {
 };
 
 const inputMathOperator = (operatorValue) => {
-	if (displayValue === "ERROR!") {
+	if (checkForError()) {
 		return;
 	}
 
@@ -176,12 +176,11 @@ const inputMathOperator = (operatorValue) => {
 };
 
 const inputEqualsOperator = () => {
-	if (displayValue === "ERROR!" || afterEqualsOperations) {
+	if (checkForError() || afterEqualsOperations) {
 		return;
 	}
 
-	if (firstNumber === "" && displayValue == 0 && mathOperator === "") {
-		//todo sprawdz
+	if (firstNumber === "" && displayValue == 0 || mathOperator === "") {
 		return;
 	}
 
@@ -193,11 +192,7 @@ const inputEqualsOperator = () => {
 };
 
 const inputDecimalSign = () => {
-	if (displayValue === "ERROR!" || afterEqualsOperations) {
-		return;
-	}
-
-	if (displayValue.toString().includes(".")) {
+	if (checkForError() || afterEqualsOperations || displayValue.toString().includes(".")) {
 		return;
 	}
 
@@ -214,7 +209,7 @@ const inputReset = () => {
 };
 
 const inputBackspace = () => {
-	if (displayValue === "ERROR!" || afterEqualsOperations) {
+	if (checkForError() || afterEqualsOperations) {
 		return;
 	}
 
@@ -225,22 +220,21 @@ const inputBackspace = () => {
 	} else {
 		displayValue = displayValue.toString().slice(0, currentDisplayLength - 1);
 	}
+
 	showCurrentValue();
 };
 
 const showCurrentValue = () => {
 	if (displayValue > DISPLAY_MAX_VALUE || displayValue < DISPLAY_MIN_VALUE) {
 		displayValue = "ERROR!";
-		displayDiv.textContent = "ERROR!";
 	} else if (
 		displayValue.toString().length > DISPLAY_MAX_VALUE.toString().length &&
 		displayValue.toString().includes(".")
 	) {
 		displayValue = round(displayValue);
-		displayDiv.textContent = displayValue;
-	} else {
-		displayDiv.textContent = displayValue;
 	}
+
+	displayDiv.textContent = displayValue;
 };
 
 function round(num) {
@@ -250,4 +244,6 @@ function round(num) {
 	return Math.round(n) / p;
 }
 
-//spamujac operatorem da sie popsuc
+function checkForError() {
+	return displayValue === "ERROR!";
+}
